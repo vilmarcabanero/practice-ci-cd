@@ -18,11 +18,10 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.DO_SSH_KEY }}" > ~/.ssh/id_rsa_do_rigfab_github_actions
           chmod 600 ~/.ssh/id_rsa_do_rigfab_github_actions
-          cat ~/.ssh/id_rsa_do_rigfab_github_actions
 
       - name: Deploy to DigitalOcean
         run: |
-          ssh -i ~/.ssh/id_rsa_do_rigfab_github_actions root@152.42.251.205
+          ssh -i ~/.ssh/id_rsa_do_rigfab_github_actions -o StrictHostKeyChecking=no root@152.42.251.205 'bash -s' <<'EOF'
           cd ~/apps/practice-github-actions
           git pull origin master
           npm install
