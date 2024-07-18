@@ -1,12 +1,15 @@
-name: Deploy to DigitalOcean
+name: Deploy to DigitalOcean (Master)
 
 on:
-  push:
+  pull_request:
     branches:
       - master
+    types:
+      - closed
 
 jobs:
   deploy:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
@@ -27,10 +30,12 @@ jobs:
           source ~/.nvm/nvm.sh
           nvm use 22.4.1
           cd ~/apps/practice-github-actions
+          git checkout master
+
           git pull origin master
           npm install
           npm run build
 
-          pm2 stop practice-github-actions || true
-          pm2 start npm --name "practice-github-actions" -- run start
+          pm2 stop practice-github-actions-master || true
+          pm2 start npm --name "practice-github-actions-master" -- run start -- -p 3000
           EOF
