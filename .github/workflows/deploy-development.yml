@@ -36,6 +36,6 @@ jobs:
           npm install
           npm run build
 
-          pm2 stop practice-github-actions || true
-          pm2 start npm --name "practice-github-actions" -- run start:dev
+          pm2 stop practice-github-actions-development || true
+          pm2 start npm --name "practice-github-actions-development" -- run start:dev -- -p 3002
           EOF
