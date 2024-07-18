@@ -1,0 +1,30 @@
+name: Deploy to DigitalOcean
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DO_SSH_KEY }}" > ~/.ssh/id_rsa_do_rigfab_github_actions
+          chmod 600 ~/.ssh/id_rsa_do_rigfab_github_actions
+
+      - name: Deploy to DigitalOcean
+        run: |
+          ssh -o StrictHostKeyChecking=no root@152.42.251.205 'bash -s' <<'EOF'
+          cd ~/apps/practice-github-actions
+          git pull origin master
+          npm install
+          npm run build
+          npm run start
+          EOF

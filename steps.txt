@@ -1,0 +1,4 @@
+Connect to the droplet
+Generate SSH Keys
+Add the SSH Keys to the github account
+Clone the project, CD then npm install
