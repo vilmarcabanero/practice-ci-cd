@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
@@ -18,10 +18,11 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.DO_SSH_KEY }}" > ~/.ssh/id_rsa_do_rigfab_github_actions
           chmod 600 ~/.ssh/id_rsa_do_rigfab_github_actions
+          cat ~/.ssh/id_rsa_do_rigfab_github_actions
 
       - name: Deploy to DigitalOcean
         run: |
-          ssh -o StrictHostKeyChecking=no root@152.42.251.205 'bash -s' <<'EOF'
+          ssh -i ~/.ssh/id_rsa_do_rigfab_github_actions root@152.42.251.205
           cd ~/apps/practice-github-actions
           git pull origin master
           npm install
