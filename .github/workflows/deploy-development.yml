@@ -37,5 +37,5 @@ jobs:
           npm run build
 
           pm2 stop practice-github-actions || true
-          pm2 start npm --name "practice-github-actions" -- run start
+          pm2 start npm --name "practice-github-actions" -- run start:dev
           EOF
