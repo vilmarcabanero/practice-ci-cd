@@ -21,14 +21,14 @@ jobs:
 
       - name: Deploy to DigitalOcean
         run: |
-          ssh -i ~/.ssh/id_rsa_do_rigfab_github_actions -o StrictHostKeyChecking=no root@152.42.251.205 'bash -s' <<'EOF'
+          ssh -i ~/.ssh/id_rsa_do_rigfab_github_actions -o StrictHostKeyChecking=no root@${{ vars.DROPLET_IP }} 'bash -s' <<'EOF'
 
-          cd ~/apps/practice-github-actions
+          cd ~/apps/practice-ci-cd
           git checkout development
           git pull origin development
           npm install
           npm run build
 
-          pm2 stop practice-github-actions-development || true
-          pm2 start npm --name "practice-github-actions-development" -- run start:dev -- -p 3002
+          pm2 stop practice-ci-cd-development || true
+          pm2 start npm --name "practice-ci-cd-development" -- run start:dev -- -p 3002
           EOF

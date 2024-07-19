@@ -24,7 +24,7 @@ jobs:
 
       - name: Deploy to DigitalOcean
         run: |
-          ssh -i ~/.ssh/id_rsa_do_rigfab_github_actions -o StrictHostKeyChecking=no root@152.42.251.205 'bash -s' <<'EOF'
+          ssh -i ~/.ssh/id_rsa_do_rigfab_github_actions -o StrictHostKeyChecking=no root@${{ vars.DROPLET_IP }} 'bash -s' <<'EOF'
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/id_rsa_do_rigfab_github_actions
           source ~/.nvm/nvm.sh
