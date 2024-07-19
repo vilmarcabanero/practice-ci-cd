@@ -29,13 +29,13 @@ jobs:
           ssh-add ~/.ssh/id_rsa_do_rigfab_github_actions
           source ~/.nvm/nvm.sh
           nvm use 22.4.1
-          cd ~/apps/practice-github-actions
+          cd ~/apps/practice-ci-cd
           git checkout master
 
           git pull origin master
           npm install
           npm run build
 
-          pm2 stop practice-github-actions-master || true
-          pm2 start npm --name "practice-github-actions-master" -- run start -- -p 3000
+          pm2 stop practice-ci-cd-master || true
+          pm2 start npm --name "practice-ci-cd-master" -- run start -- -p 3000
           EOF
