@@ -1,0 +1,38 @@
+name: Deploy to DigitalOcean (Development)
+
+on:
+  pull_request:
+    branches:
+      - development
+    types:
+      - closed
+
+jobs:
+  build-and-deploy:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DO_SSH_KEY }}" > ~/.ssh/id_rsa_do_rigfab_github_actions
+          chmod 600 ~/.ssh/id_rsa_do_rigfab_github_actions
+
+      - name: Build and Deploy to DigitalOcean
+        run: |
+          ssh -i ~/.ssh/id_rsa_do_rigfab_github_actions -o StrictHostKeyChecking=no root@152.42.251.205 'bash -s' <<'EOF'
+          cd /home/rigfab/front-end/development/RFQMS
+          git config --global --add safe.directory /home/rigfab/front-end/development/RFQMS
+          chmod -R 755 .git
+          git restore .
+          git pull origin development
+          yarn
+          npm run build:DEV
+          pm2 list
+          pm2 restart frontend-dev --update-env
+          pm2 status
+          EOF
