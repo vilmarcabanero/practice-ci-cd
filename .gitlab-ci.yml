@@ -1,0 +1,55 @@
+stages:
+  - build
+  - deploy
+
+# Development branch jobs
+build-dev:
+  stage: build
+  script:
+    - whoami
+    - cd ~/apps/practice-ci-cd
+    - git config --global --add safe.directory ~/apps/practice-ci-cd
+    - chmod -R 755 .git
+    - git restore .
+    - git checkout development
+    - git pull gitlab development
+    - npm install
+    - npm run build
+  only:
+    - development
+
+deploy-dev:
+  stage: deploy
+  script:
+    - whoami
+    - cd ~/apps/practice-ci-cd
+    - pm2 stop practice-ci-cd-development || true
+    - pm2 start npm --name "practice-ci-cd-development" -- run start:dev -- -p 3002
+  only:
+    - development
+
+# Master branch jobs
+build-master:
+  stage: build
+  script:
+    - whoami
+    - cd ~/apps/practice-ci-cd
+    - git config --global --add safe.directory ~/apps/practice-ci-cd
+    - chmod -R 755 .git
+    - git restore .
+    - git checkout master
+    - git pull gitlab master
+    - npm install
+    - npm run build
+  only:
+    - master
+
+deploy-master:
+  stage: deploy
+  script:
+    - whoami
+    - cd ~/apps/practice-ci-cd
+    - pm2 stop practice-ci-cd-master || true
+    - pm2 start npm --name "practice-ci-cd-master" -- run start:prod -- -p 3000
+  only:
+    - master
