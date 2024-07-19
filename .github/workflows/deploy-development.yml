@@ -23,6 +23,11 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_rsa_do_rigfab_github_actions -o StrictHostKeyChecking=no root@${{ vars.DROPLET_IP }} 'bash -s' <<'EOF'
 
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa_do_rigfab_github_actions
+          source ~/.nvm/nvm.sh
+          nvm use 22.4.1
+
           cd ~/apps/practice-ci-cd
           git checkout development
           git pull origin development
