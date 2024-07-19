@@ -12,7 +12,7 @@ build-dev:
     - chmod -R 755 .git
     - git restore .
     - git checkout development
-    - git pull origin development
+    - git pull gitlab development
     - npm install
     - npm run build
   only:
@@ -38,7 +38,7 @@ build-master:
     - chmod -R 755 .git
     - git restore .
     - git checkout master
-    - git pull origin master
+    - git pull gitlab master
     - npm install
     - npm run build
   only:
